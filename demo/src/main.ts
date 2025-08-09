@@ -62,6 +62,7 @@ const attachInputListener = (
   });
 
   input.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
     if (e.key === "ArrowUp") {
       e.preventDefault();
       switch (property) {
@@ -99,9 +100,9 @@ const dayInput = document.getElementById("day") as HTMLInputElement;
 const monthInput = document.getElementById("month") as HTMLInputElement;
 const yearInput = document.getElementById("year") as HTMLInputElement;
 
-dayInput?.addEventListener("beforeinput", preventNonNumericInput);
-monthInput?.addEventListener("beforeinput", preventNonNumericInput);
-yearInput?.addEventListener("beforeinput", preventNonNumericInput);
+dayInput.addEventListener("beforeinput", preventNonNumericInput);
+monthInput.addEventListener("beforeinput", preventNonNumericInput);
+yearInput.addEventListener("beforeinput", preventNonNumericInput);
 
 const now = new Date();
 
