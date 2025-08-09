@@ -41,6 +41,9 @@ export class Dewdate {
     } else {
       this.month = month;
     }
+    if (this.day > daysInMonth(this.month, this.year)) {
+      this.Day = daysInMonth(this.month, this.year);
+    }
   }
 
   set Year(year: number) {
@@ -48,6 +51,9 @@ export class Dewdate {
       this.year = 0;
     } else {
       this.year = year;
+    }
+    if (this.day > daysInMonth(this.month, this.year)) {
+      this.Day = daysInMonth(this.month, this.year);
     }
   }
 
@@ -69,15 +75,16 @@ export class Dewdate {
    * If the month exceeds December, it resets to January and increments the year.
    */
   public incrementDay(): void {
-    this.day += 1;
-
     const daysInCurrentMonth = daysInMonth(this.month, this.year);
-    if (this.day > daysInCurrentMonth) {
-      this.day = 1;
-      if (this.month === 12) {
-        this.month = 1;
-        this.year += 1;
-      } else this.month += 1;
+
+    if (this.day >= daysInCurrentMonth) {
+      this.Day = 1;
+      if (this.Month === 12) {
+        this.Month = 1;
+        this.Year += 1;
+      } else {
+        this.Month += 1;
+      }
     }
   }
 
@@ -87,51 +94,44 @@ export class Dewdate {
    * If the month goes below January, it resets to December and decrements the year.
    */
   public decrementDay(): void {
-    this.day -= 1;
-    if (this.day < 1) {
-      if (this.month <= 1) {
-        this.day = daysInMonth(12, this.year - 1);
-        this.month = 12;
-        this.year -= 1;
+    if (this.day === 1) {
+      if (this.month === 1) {
+        this.Month = 12;
+        this.Year -= 1;
       } else {
-        this.day = daysInMonth(this.month - 1, this.year);
-        this.month -= 1;
+        this.Month -= 1;
       }
+      this.Day = daysInMonth(this.month, this.year);
     }
   }
 
   public incrementMonth(): void {
-    this.month += 1;
-    if (this.month > 12) {
-      this.month = 1;
-      this.year += 1;
-    }
-    if (this.day > daysInMonth(this.month, this.year)) {
-      this.day = daysInMonth(this.month, this.year);
+    if (this.month === 12) {
+      this.Month = 1;
+      this.Year += 1;
+    } else {
+      this.Month += 1;
     }
   }
 
   public decrementMonth(): void {
-    this.month -= 1;
-    if (this.month < 1) {
-      this.month = 12;
-      this.year -= 1;
-      if (this.year < 0) {
-        this.year = 0;
+    if (this.month === 1) {
+      this.Month = 12;
+      if (this.year > 0) {
+        this.Year -= 1;
       }
-    }
-    if (this.day > daysInMonth(this.month, this.year)) {
-      this.day = daysInMonth(this.month, this.year);
+    } else {
+      this.Month -= 1;
     }
   }
 
   public incrementYear(): void {
-    this.year += 1;
+    this.Year += 1;
   }
 
   public decrementYear(): void {
     if (this.year > 0) {
-      this.year -= 1;
+      this.Year -= 1;
     }
   }
 }

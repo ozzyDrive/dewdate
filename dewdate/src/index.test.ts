@@ -61,6 +61,14 @@ describe("Dewdate", () => {
       dewdate.Month = 13;
       expect(dewdate.Month).toBe(12); // Should default to December
     });
+
+    it("should adjust day if it exceeds the number of days in the new month", () => {
+      const dewdate = new Dewdate(31, 1, 2023); // January has 31 days
+      dewdate.Month = 2; // February has 28 days in non-leap years
+      expect(dewdate.Day).toBe(28); // Should adjust to the last valid day of February
+      expect(dewdate.Month).toBe(2);
+      expect(dewdate.Year).toBe(2023);
+    });
   });
 
   describe("set year", () => {
@@ -74,6 +82,14 @@ describe("Dewdate", () => {
       const dewdate = new Dewdate(15, 8, 2023);
       dewdate.Year = -2023;
       expect(dewdate.Year).toBe(0); // Should default to year 0
+    });
+
+    it("should adjust day if it exceeds the number of days in the month for the new year", () => {
+      const dewdate = new Dewdate(29, 2, 2024); // Leap year
+      dewdate.Year = 2023; // Non-leap year
+      expect(dewdate.Day).toBe(28); // Should adjust to the last valid day of February
+      expect(dewdate.Month).toBe(2);
+      expect(dewdate.Year).toBe(2023);
     });
   });
 
@@ -165,6 +181,14 @@ describe("Dewdate", () => {
       expect(dewdate.Month).toBe(2);
       expect(dewdate.Year).toBe(2024);
     });
+
+    it("should adjust day if it exceeds the number of days in the month", () => {
+      const dewdate = new Dewdate(31, 1, 2024); // January 31st
+      dewdate.incrementMonth(); // Should go to February 29th (leap year)
+      expect(dewdate.Day).toBe(29);
+      expect(dewdate.Month).toBe(2);
+      expect(dewdate.Year).toBe(2024);
+    });
   });
 
   describe("decrement month", () => {
@@ -199,6 +223,14 @@ describe("Dewdate", () => {
       expect(dewdate.Month).toBe(2);
       expect(dewdate.Year).toBe(2024);
     });
+
+    it("should adjust day if it exceeds the number of days in the month", () => {
+      const dewdate = new Dewdate(31, 3, 2024); // March 31st
+      dewdate.decrementMonth(); // Should go to February 29th (leap year)
+      expect(dewdate.Day).toBe(29);
+      expect(dewdate.Month).toBe(2);
+      expect(dewdate.Year).toBe(2024);
+    });
   });
 
   describe("increment year", () => {
@@ -210,12 +242,30 @@ describe("Dewdate", () => {
       expect(dewdate.Year).toBe(2024); // Year incremented
     });
 
+    it("should adjust day if it exceeds the number of days in the month for the new year", () => {
+      const dewdate = new Dewdate(29, 2, 2024); // Leap year
+      dewdate.incrementYear(); // Should go to February 28th (non-leap year)
+      expect(dewdate.Day).toBe(28);
+      expect(dewdate.Month).toBe(2);
+      expect(dewdate.Year).toBe(2025);
+    });
+  });
+
+  describe("decrement year", () => {
     it("should decrement year correctly", () => {
       const dewdate = new Dewdate(15, 8, 2023);
       dewdate.decrementYear();
       expect(dewdate.Day).toBe(15); // Day remains the same
       expect(dewdate.Month).toBe(8); // Month remains the same
       expect(dewdate.Year).toBe(2022); // Year decremented
+    });
+
+    it("should adjust day if it exceeds the number of days in the month for the new year", () => {
+      const dewdate = new Dewdate(29, 2, 2024); // Leap year
+      dewdate.decrementYear(); // Should go to February 28th (non-leap year)
+      expect(dewdate.Day).toBe(28);
+      expect(dewdate.Month).toBe(2);
+      expect(dewdate.Year).toBe(2023);
     });
   });
 });
