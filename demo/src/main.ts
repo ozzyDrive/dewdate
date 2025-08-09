@@ -10,6 +10,12 @@ const pad = (value: number, length: number) => {
   return value.toString().padStart(length, "0");
 };
 
+const updateValues = () => {
+  dayInput.value = pad(dewdate.Day, 2);
+  monthInput.value = pad(dewdate.Month, 2);
+  yearInput.value = pad(dewdate.Year, 4);
+};
+
 const attachInputListener = (
   input: HTMLInputElement,
   property: "Day" | "Month" | "Year"
@@ -21,13 +27,10 @@ const attachInputListener = (
     if (target.value === "0") return; // intermediate state
     dewdate[property] = value;
     if (target.value === dewdate[property].toString()) return; // stop input from jumping to end when first character is erased
-    target.value = pad(dewdate[property], property === "Year" ? 4 : 2);
+    updateValues();
   });
 
-  input.addEventListener("blur", (e) => {
-    const target = e.target as HTMLInputElement;
-    target.value = pad(dewdate[property], property === "Year" ? 4 : 2);
-  });
+  input.addEventListener("blur", updateValues);
 
   input.addEventListener("wheel", (e) => {
     e.preventDefault();
@@ -56,9 +59,7 @@ const attachInputListener = (
           break;
       }
     }
-    dayInput.value = pad(dewdate.Day, 2);
-    monthInput.value = pad(dewdate.Month, 2);
-    yearInput.value = pad(dewdate.Year, 4);
+    updateValues();
   });
 
   input.addEventListener("keydown", (e) => {
@@ -90,9 +91,7 @@ const attachInputListener = (
           break;
       }
     }
-    dayInput.value = pad(dewdate.Day, 2);
-    monthInput.value = pad(dewdate.Month, 2);
-    yearInput.value = pad(dewdate.Year, 4);
+    updateValues();
   });
 };
 
@@ -112,9 +111,7 @@ const dewdate = new Dewdate(
   now.getFullYear()
 );
 
-dayInput.value = pad(dewdate.Day, 2);
-monthInput.value = pad(dewdate.Month, 2);
-yearInput.value = pad(dewdate.Year, 4);
+updateValues();
 
 attachInputListener(dayInput, "Day");
 attachInputListener(monthInput, "Month");
