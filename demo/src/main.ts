@@ -28,6 +28,71 @@ const attachInputListener = (
     const target = e.target as HTMLInputElement;
     target.value = pad(dewdate[property], property === "Year" ? 4 : 2);
   });
+
+  input.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      switch (property) {
+        case "Day":
+          dewdate.incrementDay();
+          break;
+        case "Month":
+          dewdate.incrementMonth();
+          break;
+        case "Year":
+          dewdate.incrementYear();
+          break;
+      }
+    } else {
+      switch (property) {
+        case "Day":
+          dewdate.decrementDay();
+          break;
+        case "Month":
+          dewdate.decrementMonth();
+          break;
+        case "Year":
+          dewdate.decrementYear();
+          break;
+      }
+    }
+    dayInput.value = pad(dewdate.Day, 2);
+    monthInput.value = pad(dewdate.Month, 2);
+    yearInput.value = pad(dewdate.Year, 4);
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      switch (property) {
+        case "Day":
+          dewdate.incrementDay();
+          break;
+        case "Month":
+          dewdate.incrementMonth();
+          break;
+        case "Year":
+          dewdate.incrementYear();
+          break;
+      }
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      switch (property) {
+        case "Day":
+          dewdate.decrementDay();
+          break;
+        case "Month":
+          dewdate.decrementMonth();
+          break;
+        case "Year":
+          dewdate.decrementYear();
+          break;
+      }
+    }
+    dayInput.value = pad(dewdate.Day, 2);
+    monthInput.value = pad(dewdate.Month, 2);
+    yearInput.value = pad(dewdate.Year, 4);
+  });
 };
 
 const dayInput = document.getElementById("day") as HTMLInputElement;
