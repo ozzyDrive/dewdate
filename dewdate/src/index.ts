@@ -85,6 +85,8 @@ export class Dewdate {
       } else {
         this.Month += 1;
       }
+    } else {
+      this.Day += 1;
     }
   }
 
@@ -102,6 +104,8 @@ export class Dewdate {
         this.Month -= 1;
       }
       this.Day = daysInMonth(this.month, this.year);
+    } else {
+      this.Day -= 1;
     }
   }
 
